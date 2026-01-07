@@ -156,6 +156,12 @@
       background: #fffdf7;
     }
 
+    .loan {
+      margin-top: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
     button {
       border: 2px solid #221f1c;
       border-radius: 999px;
@@ -317,6 +323,11 @@
           <label for="betAmount">Wager this round</label>
           <input type="number" id="betAmount" min="1" step="1" value="10" />
         </div>
+        <div class="loan">
+          <label for="loanAmount">Take a loan</label>
+          <input type="number" id="loanAmount" min="1" step="1" placeholder="Enter amount" />
+          <button type="button" id="loanButton">Borrow now</button>
+        </div>
         <p class="status" id="guessStatus">No guess yet.</p>
       </div>
 
@@ -330,6 +341,7 @@
           <span class="badge">Pushes: <span id="pushes">0</span></span>
         </div>
         <p class="note">If the total is exactly 10, the round is a push.</p>
+        <p class="note" id="loanStatus">No loans due.</p>
       </div>
 
       <div class="panel stagger">
@@ -349,11 +361,14 @@
     const guessHigh = document.getElementById("guessHigh");
     const guessLow = document.getElementById("guessLow");
     const betAmount = document.getElementById("betAmount");
+    const loanAmount = document.getElementById("loanAmount");
+    const loanButton = document.getElementById("loanButton");
     const balanceEl = document.getElementById("balance");
     const winsEl = document.getElementById("wins");
     const lossesEl = document.getElementById("losses");
     const pushesEl = document.getElementById("pushes");
     const historyList = document.getElementById("historyList");
+    const loanStatus = document.getElementById("loanStatus");
 
     let countdown = ROLL_INTERVAL;
     let guess = null;
@@ -362,7 +377,9 @@
     let wins = 0;
     let losses = 0;
     let pushes = 0;
+    let roundCount = 0;
     const history = [];
+    const loans = [];
 
     function setGuess(value) {
       const wager = Number.parseInt(betAmount.value, 10);
@@ -424,6 +441,9 @@
         pushesEl.textContent = String(pushes);
       }
 
+      roundCount += 1;
+      settleLoans();
+
       history.unshift({
         dice,
         total,
@@ -442,6 +462,57 @@
       guessLow.classList.remove("selected");
       guessStatus.textContent = "No guess yet.";
     }
+
+    function settleLoans() {
+      const dueLoans = loans.filter((loan) => loan.dueRound <= roundCount);
+      if (dueLoans.length === 0) {
+        updateLoanStatus();
+        return;
+      }
+
+      const totalDue = dueLoans.reduce((sum, loan) => sum + loan.amount, 0);
+      balance -= totalDue;
+      balanceEl.textContent = String(balance);
+
+      dueLoans.forEach((loan) => {
+        const index = loans.indexOf(loan);
+        if (index >= 0) {
+          loans.splice(index, 1);
+        }
+      });
+
+      updateLoanStatus();
+    }
+
+    function updateLoanStatus() {
+      if (loans.length === 0) {
+        loanStatus.textContent = "No loans due.";
+        return;
+      }
+
+      const nextDue = Math.min(...loans.map((loan) => loan.dueRound));
+      const roundsLeft = Math.max(0, nextDue - roundCount);
+      const dueTotal = loans
+        .filter((loan) => loan.dueRound === nextDue)
+        .reduce((sum, loan) => sum + loan.amount, 0);
+      loanStatus.textContent = `Next loan due in ${roundsLeft} round${roundsLeft === 1 ? "" : "s"}: ${dueTotal}.`;
+    }
+
+    function takeLoan() {
+      const amount = Number.parseInt(loanAmount.value, 10);
+      if (!Number.isFinite(amount) || amount <= 0) {
+        loanStatus.textContent = "Enter a valid loan amount.";
+        return;
+      }
+
+      balance += amount;
+      balanceEl.textContent = String(balance);
+      loans.push({ amount, dueRound: roundCount + 10 });
+      loanAmount.value = "";
+      updateLoanStatus();
+    }
+
+    loanButton.addEventListener("click", takeLoan);
 
     function renderHistory() {
       historyList.innerHTML = "";
