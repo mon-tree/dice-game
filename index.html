@@ -210,6 +210,32 @@
       margin: 0;
     }
 
+    .history {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 2px solid #221f1c;
+      background: #fffdf7;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .history-item span {
+      font-weight: 500;
+      color: #3b3530;
+    }
+
     @keyframes float-in {
       from {
         opacity: 0;
@@ -294,6 +320,11 @@
         </div>
         <p class="note">If the total is exactly 10, the round is a push.</p>
       </div>
+
+      <div class="panel stagger">
+        <h2>Recent Rolls</h2>
+        <ul class="history" id="historyList"></ul>
+      </div>
     </section>
   </main>
 
@@ -311,6 +342,7 @@
     const winsEl = document.getElementById("wins");
     const lossesEl = document.getElementById("losses");
     const pushesEl = document.getElementById("pushes");
+    const historyList = document.getElementById("historyList");
 
     let countdown = ROLL_INTERVAL;
     let guess = null;
@@ -319,6 +351,7 @@
     let wins = 0;
     let losses = 0;
     let pushes = 0;
+    const history = [];
 
     function setGuess(value) {
       const wager = Number.parseInt(betAmount.value, 10);
@@ -380,11 +413,40 @@
         pushesEl.textContent = String(pushes);
       }
 
+      history.unshift({
+        dice,
+        total,
+        outcome
+      });
+
+      if (history.length > 10) {
+        history.pop();
+      }
+
+      renderHistory();
+
       guess = null;
       currentBet = 0;
       guessHigh.classList.remove("selected");
       guessLow.classList.remove("selected");
       guessStatus.textContent = "No guess yet.";
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = "";
+      history.forEach((entry) => {
+        const item = document.createElement("li");
+        item.className = "history-item";
+        const label = document.createElement("strong");
+        const detail = document.createElement("span");
+        const outcomeLabel = entry.outcome === "push"
+          ? "Push"
+          : (entry.outcome === "high" ? "High" : "Low");
+        label.textContent = `${entry.total} (${entry.dice.join(", ")})`;
+        detail.textContent = outcomeLabel;
+        item.append(label, detail);
+        historyList.append(item);
+      });
     }
 
     function tick() {
