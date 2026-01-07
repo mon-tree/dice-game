@@ -214,26 +214,37 @@
       margin: 0;
       padding: 0;
       list-style: none;
-      display: grid;
-      gap: 8px;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 6px;
     }
 
     .history-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 12px;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
       border: 2px solid #221f1c;
-      background: #fffdf7;
-      font-size: 0.95rem;
-      font-weight: 600;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      font-weight: 700;
+      flex: 0 0 auto;
     }
 
-    .history-item span {
-      font-weight: 500;
-      color: #3b3530;
+    .history-item.high {
+      background: #1c1b1a;
+      color: #fff;
+    }
+
+    .history-item.low {
+      background: #fffdf7;
+      color: #1c1b1a;
+    }
+
+    .history-item.push {
+      background: #f1e6d5;
+      color: #1c1b1a;
     }
 
     @keyframes float-in {
@@ -436,15 +447,8 @@
       historyList.innerHTML = "";
       history.forEach((entry) => {
         const item = document.createElement("li");
-        item.className = "history-item";
-        const label = document.createElement("strong");
-        const detail = document.createElement("span");
-        const outcomeLabel = entry.outcome === "push"
-          ? "Push"
-          : (entry.outcome === "high" ? "High" : "Low");
-        label.textContent = `${entry.total} (${entry.dice.join(", ")})`;
-        detail.textContent = outcomeLabel;
-        item.append(label, detail);
+        item.className = `history-item ${entry.outcome}`;
+        item.textContent = String(entry.total);
         historyList.append(item);
       });
     }
