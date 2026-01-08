@@ -292,43 +292,6 @@
       color: #111;
     }
 
-    .fullscreen-cta {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 24px;
-      background: radial-gradient(900px 600px at 50% 30%, rgba(255, 249, 240, 0.95), rgba(236, 220, 201, 0.98));
-      color: var(--ink);
-    }
-
-    .fullscreen-cta[hidden] {
-      display: none;
-    }
-
-    .fullscreen-cta .cta-card {
-      border: 2px solid #221f1c;
-      border-radius: 18px;
-      background: #fffdf7;
-      padding: 20px 24px;
-      max-width: 360px;
-      box-shadow: 0 18px 45px rgba(33, 29, 26, 0.2);
-    }
-
-    .fullscreen-cta h2 {
-      margin: 0 0 8px;
-      font-family: "Fraunces", "Times New Roman", serif;
-      font-size: 1.6rem;
-    }
-
-    .fullscreen-cta p {
-      margin: 0 0 16px;
-      font-size: 1rem;
-      color: #3b3530;
-    }
-
     @keyframes float-in {
       from {
         opacity: 0;
@@ -393,13 +356,6 @@
   </style>
 </head>
 <body>
-  <div class="fullscreen-cta" id="fullscreenCta" hidden>
-    <div class="cta-card">
-      <h2>Landscape fullscreen</h2>
-      <p>Tap once to open in fullscreen and lock landscape on your phone.</p>
-      <button type="button" id="fullscreenBtn">Enter fullscreen</button>
-    </div>
-  </div>
   <main class="frame">
     <header class="stagger">
       <h1>Higher or Lower 10</h1>
@@ -484,9 +440,6 @@
     const pushesEl = document.getElementById("pushes");
     const historyList = document.getElementById("historyList");
     const loanStatus = document.getElementById("loanStatus");
-    const fullscreenCta = document.getElementById("fullscreenCta");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-
     let countdown = ROLL_INTERVAL;
     let guess = null;
     let currentBet = 0;
@@ -498,37 +451,6 @@
     const history = [];
     const loans = [];
     let isRolling = false;
-
-    function isMobileViewport() {
-      return window.matchMedia("(max-width: 900px)").matches;
-    }
-
-    function isFullscreen() {
-      return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
-    }
-
-    function lockLandscape() {
-      if (screen.orientation && typeof screen.orientation.lock === "function") {
-        screen.orientation.lock("landscape").catch(() => {});
-      }
-    }
-
-    function requestLandscapeFullscreen() {
-      const root = document.documentElement;
-      if (root.requestFullscreen) {
-        root.requestFullscreen().then(lockLandscape).catch(() => {});
-        return;
-      }
-      if (root.webkitRequestFullscreen) {
-        root.webkitRequestFullscreen();
-        lockLandscape();
-      }
-    }
-
-    function updateFullscreenCta() {
-      const shouldShow = isMobileViewport() && !isFullscreen();
-      fullscreenCta.hidden = !shouldShow;
-    }
 
     function setGuess(value) {
       const wager = Number.parseInt(betAmount.value, 10);
@@ -689,19 +611,6 @@
       }
       timerDisplay.textContent = String(countdown).padStart(2, "0");
     }
-
-    fullscreenBtn.addEventListener("click", () => {
-      requestLandscapeFullscreen();
-    });
-
-    document.addEventListener("fullscreenchange", updateFullscreenCta);
-    document.addEventListener("webkitfullscreenchange", updateFullscreenCta);
-    window.addEventListener("load", () => {
-      updateFullscreenCta();
-      if (isFullscreen()) {
-        lockLandscape();
-      }
-    });
 
     timerDisplay.textContent = String(countdown).padStart(2, "0");
     setInterval(tick, 1000);
