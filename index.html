@@ -366,8 +366,8 @@
       <div class="stagger">
         <div class="top-band">
           <div class="choice">
-            <span class="label">Under 10</span>
-            <button type="button" id="guessLow">Choose</button>
+            <span class="label">Xỉu</span>
+            <button type="button" id="guessLow">Cược</button>
           </div>
           <div class="center-wheel">
             <div class="timer" id="timerDisplay">40</div>
@@ -378,15 +378,15 @@
             </div>
           </div>
           <div class="choice">
-            <span class="label">Over 10</span>
-            <button type="button" id="guessHigh">Choose</button>
+            <span class="label">Tài</span>
+            <button type="button" id="guessHigh">Cược</button>
           </div>
         </div>
-        <p class="status-line" id="resultDisplay">Place your guess.</p>
+        <p class="status-line" id="resultDisplay">Mời đặt cược.</p>
       </div>
 
       <div class="panel stagger">
-        <h2>Recent Rolls</h2>
+        <h2>Cầu</h2>
         <ul class="history" id="historyList"></ul>
       </div>
 
@@ -394,7 +394,7 @@
         <div class="panel stagger">
           <h2>Balance</h2>
           <div class="score">
-            <span class="badge">Balance: <span id="balance">500</span></span>
+            <span class="badge">Số dư: <span id="balance">500</span></span>
             <span class="badge">Wins: <span id="wins">0</span></span>
             <span class="badge">Losses: <span id="losses">0</span></span>
             <span class="badge">Pushes: <span id="pushes">0</span></span>
@@ -402,19 +402,19 @@
         </div>
 
         <div class="panel stagger">
-          <h2>Wager Amount</h2>
+          <h2>Tiền cược</h2>
           <div class="wager">
-            <label for="betAmount">Wager this round</label>
+            <label for="betAmount">Số tiền cược</label>
             <input type="number" id="betAmount" min="1" step="1" value="10" />
           </div>
         </div>
 
         <div class="panel stagger">
-          <h2>Loaning Money</h2>
+          <h2>Vay tiền</h2>
           <div class="loan">
-            <label for="loanAmount">Take a loan</label>
+            <label for="loanAmount">Nhập khoản vay</label>
             <input type="number" id="loanAmount" min="1" step="1" placeholder="Enter amount" />
-            <button type="button" id="loanButton">Borrow now</button>
+            <button type="button" id="loanButton">Vay ngay</button>
           </div>
           <p class="note" id="loanStatus">No loans due.</p>
         </div>
