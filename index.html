@@ -293,6 +293,44 @@
       color: #111;
     }
 
+    .fullscreen-cta {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+      background: rgba(15, 15, 15, 0.78);
+      color: #fff;
+    }
+
+    .fullscreen-cta[hidden] {
+      display: none;
+    }
+
+    .fullscreen-cta .cta-card {
+      border: 2px solid #fff;
+      border-radius: 14px;
+      background: #111;
+      padding: 20px 24px;
+      max-width: 360px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+    }
+
+    .fullscreen-cta h2 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .fullscreen-cta p {
+      margin: 0 0 16px;
+      font-size: 0.95rem;
+      color: #eaeaea;
+    }
+
     #loanAmount{
       width: 100%;
       border: 2px solid var(--border);
@@ -367,6 +405,13 @@
   </style>
 </head>
 <body>
+  <div class="fullscreen-cta" id="fullscreenCta" hidden>
+    <div class="cta-card">
+      <h2>Fullscreen mode</h2>
+      <p>Tap once to open fullscreen and lock landscape on your phone.</p>
+      <button type="button" id="fullscreenBtn">Enter fullscreen</button>
+    </div>
+  </div>
   <main class="frame">
     <header class="stagger">
       <h1>Tài xỉu Tree88</h1>
@@ -451,6 +496,8 @@
     const pushesEl = document.getElementById("pushes");
     const historyList = document.getElementById("historyList");
     const loanStatus = document.getElementById("loanStatus");
+    const fullscreenCta = document.getElementById("fullscreenCta");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
     let countdown = ROLL_INTERVAL;
     let guess = null;
     let currentBet = 0;
@@ -462,6 +509,37 @@
     const history = [];
     const loans = [];
     let isRolling = false;
+
+    function isMobileViewport() {
+      return window.matchMedia("(max-width: 900px)").matches;
+    }
+
+    function isFullscreen() {
+      return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+    }
+
+    function lockLandscape() {
+      if (screen.orientation && typeof screen.orientation.lock === "function") {
+        screen.orientation.lock("landscape").catch(() => {});
+      }
+    }
+
+    function requestLandscapeFullscreen() {
+      const root = document.documentElement;
+      if (root.requestFullscreen) {
+        root.requestFullscreen().then(lockLandscape).catch(() => {});
+        return;
+      }
+      if (root.webkitRequestFullscreen) {
+        root.webkitRequestFullscreen();
+        lockLandscape();
+      }
+    }
+
+    function updateFullscreenCta() {
+      const shouldShow = isMobileViewport() && !isFullscreen();
+      fullscreenCta.hidden = !shouldShow;
+    }
 
     function setGuess(value) {
       const wager = Number.parseInt(betAmount.value, 10);
@@ -622,6 +700,19 @@
       }
       timerDisplay.textContent = String(countdown).padStart(2, "0");
     }
+
+    fullscreenBtn.addEventListener("click", () => {
+      requestLandscapeFullscreen();
+    });
+
+    document.addEventListener("fullscreenchange", updateFullscreenCta);
+    document.addEventListener("webkitfullscreenchange", updateFullscreenCta);
+    window.addEventListener("load", () => {
+      updateFullscreenCta();
+      if (isFullscreen()) {
+        lockLandscape();
+      }
+    });
 
     timerDisplay.textContent = String(countdown).padStart(2, "0");
     setInterval(tick, 1000);
