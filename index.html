@@ -2,33 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Higher or Lower 10</title>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Space+Grotesk:wght@400;600&display=swap");
 
     :root {
-      --bg-1: #f2efe7;
-      --bg-2: #e6d7c3;
-      --ink: #1c1b1a;
-      --accent: #d0624b;
-      --accent-2: #2f6f5e;
-      --card: #fffaf3;
-      --shadow: rgba(20, 17, 15, 0.18);
+      --ink: #0f0f0f;
+      --frame: #ffffff;
+      --border: #0f0f0f;
+      --shadow: rgba(0, 0, 0, 0.08);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html,
+    body {
+      height: 100%;
+    }
+
     body {
       margin: 0;
-      min-height: 100vh;
+      min-height: 100dvh;
       font-family: "Space Grotesk", "Segoe UI", sans-serif;
       color: var(--ink);
-      background: radial-gradient(1200px 800px at 10% 10%, #f7f3ee, var(--bg-1))
-          , radial-gradient(900px 600px at 80% 20%, #f1e0c8, transparent)
-          , linear-gradient(145deg, var(--bg-1), var(--bg-2));
+      background: #f6f6f6;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -37,87 +37,137 @@
 
     .frame {
       width: min(980px, 100%);
-      background: var(--card);
-      border: 2px solid #221f1c;
-      border-radius: 22px;
-      padding: 28px;
-      box-shadow: 0 18px 50px var(--shadow);
-      position: relative;
-      overflow: hidden;
-      animation: float-in 0.8s ease-out;
-    }
-
-    .frame::after {
-      content: "";
-      position: absolute;
-      inset: -30% -20% auto auto;
-      width: 320px;
-      height: 320px;
-      background: radial-gradient(circle at 30% 30%, #f7cfa9, transparent 60%);
-      opacity: 0.7;
-      pointer-events: none;
+      background: var(--frame);
+      border: 2px solid var(--border);
+      border-radius: 0;
+      padding: 26px 24px 24px;
+      box-shadow: 0 12px 30px var(--shadow);
     }
 
     header {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 22px;
+      margin-bottom: 14px;
     }
 
     h1 {
-      font-family: "Fraunces", "Times New Roman", serif;
-      font-size: clamp(2rem, 3vw, 3.1rem);
-      margin: 0;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      font-size: 1.2rem;
+      margin: 0 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
     }
 
     .sub {
-      max-width: 600px;
-      line-height: 1.5;
-      font-size: 1rem;
       margin: 0;
-      color: #3b3530;
+      font-size: 0.95rem;
+      color: #333;
     }
 
     .main {
       display: grid;
-      gap: 22px;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      align-items: stretch;
+      gap: 18px;
+    }
+
+    .top-band {
+      border: 2px solid var(--border);
+      padding: 18px 16px;
+      display: grid;
+      grid-template-columns: 1fr 200px 1fr;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .choice {
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .choice button {
+      width: 100%;
+      border-radius: 0;
+      background: #fff;
+    }
+
+    .choice .label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    .center-wheel {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: grid;
+      place-items: center;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .center-wheel .timer {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .dice-circle {
+      position: absolute;
+      inset: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      place-items: center;
+      gap: 10px;
+    }
+
+    .dice-circle .die {
+      width: 44px;
+      height: 44px;
+      font-size: 1.2rem;
+    }
+
+    .dice-circle .die:nth-child(1) {
+      grid-column: 1 / span 2;
+    }
+
+    .status-line {
+      margin: 8px 0 0;
+      text-align: center;
+      min-height: 1.4em;
+      font-size: 1rem;
     }
 
     .panel {
-      border: 2px solid #221f1c;
-      border-radius: 16px;
-      padding: 18px;
-      background: #fff7ed;
-      min-height: 180px;
+      border: 2px solid var(--border);
+      border-radius: 0;
+      padding: 12px 14px;
+      background: #fff;
+    }
+
+    .bottom-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
     }
 
     .panel h2 {
       margin: 0 0 8px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .dice-row {
-      display: flex;
-      gap: 12px;
-      margin: 12px 0 6px;
+      letter-spacing: 0.12em;
     }
 
     .die {
-      width: 64px;
-      height: 64px;
-      border-radius: 14px;
-      border: 2px solid #221f1c;
+      width: 54px;
+      height: 54px;
+      border-radius: 0;
+      border: 2px solid var(--border);
       display: grid;
       place-items: center;
-      font-size: 1.8rem;
+      font-size: 1.4rem;
       font-weight: 700;
-      background: #fffdf7;
-      box-shadow: inset 0 0 0 3px #f1e6d5;
+      background: #fff;
+      box-shadow: none;
       transition: transform 0.3s ease;
     }
 
@@ -125,15 +175,10 @@
       transform: translateY(-6px) rotate(-3deg);
     }
 
-    .sum {
-      font-size: 1.4rem;
-      font-weight: 600;
-    }
-
     .guess-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
     }
 
     .wager {
@@ -148,12 +193,12 @@
 
     .wager input {
       width: 100%;
-      border: 2px solid #221f1c;
-      border-radius: 12px;
+      border: 2px solid var(--border);
+      border-radius: 0;
       padding: 10px 12px;
       font-size: 1rem;
       font-family: "Space Grotesk", "Segoe UI", sans-serif;
-      background: #fffdf7;
+      background: #fff;
     }
 
     .loan {
@@ -163,13 +208,13 @@
     }
 
     button {
-      border: 2px solid #221f1c;
-      border-radius: 999px;
+      border: 2px solid var(--border);
+      border-radius: 0;
       padding: 12px 16px;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      background: #fffdf7;
+      background: #fff;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
@@ -179,20 +224,14 @@
     }
 
     button.selected {
-      background: var(--accent);
+      background: #000;
       color: #fff;
-    }
-
-    .status {
-      font-size: 1.1rem;
-      margin: 10px 0 0;
-      min-height: 1.6em;
     }
 
     .timer {
       font-size: 2.2rem;
       font-weight: 700;
-      color: var(--accent-2);
+      color: var(--ink);
       letter-spacing: 0.08em;
     }
 
@@ -205,8 +244,8 @@
 
     .badge {
       padding: 6px 12px;
-      border-radius: 999px;
-      border: 2px solid #221f1c;
+      border-radius: 0;
+      border: 2px solid var(--border);
       background: #fff;
     }
 
@@ -229,8 +268,8 @@
     .history-item {
       width: 46px;
       height: 46px;
-      border-radius: 50%;
-      border: 2px solid #221f1c;
+      border-radius: 0;
+      border: 2px solid var(--border);
       display: grid;
       place-items: center;
       font-size: 1rem;
@@ -239,18 +278,55 @@
     }
 
     .history-item.high {
-      background: #1c1b1a;
+      background: #111;
       color: #fff;
     }
 
     .history-item.low {
-      background: #fffdf7;
-      color: #1c1b1a;
+      background: #fff;
+      color: #111;
     }
 
     .history-item.push {
-      background: #f1e6d5;
-      color: #1c1b1a;
+      background: #eaeaea;
+      color: #111;
+    }
+
+    .fullscreen-cta {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 24px;
+      background: radial-gradient(900px 600px at 50% 30%, rgba(255, 249, 240, 0.95), rgba(236, 220, 201, 0.98));
+      color: var(--ink);
+    }
+
+    .fullscreen-cta[hidden] {
+      display: none;
+    }
+
+    .fullscreen-cta .cta-card {
+      border: 2px solid #221f1c;
+      border-radius: 18px;
+      background: #fffdf7;
+      padding: 20px 24px;
+      max-width: 360px;
+      box-shadow: 0 18px 45px rgba(33, 29, 26, 0.2);
+    }
+
+    .fullscreen-cta h2 {
+      margin: 0 0 8px;
+      font-family: "Fraunces", "Times New Roman", serif;
+      font-size: 1.6rem;
+    }
+
+    .fullscreen-cta p {
+      margin: 0 0 16px;
+      font-size: 1rem;
+      color: #3b3530;
     }
 
     @keyframes float-in {
@@ -280,21 +356,50 @@
 
     @media (max-width: 700px) {
       .frame {
-        padding: 20px;
+        padding: 18px 16px 16px;
       }
 
-      .dice-row {
-        justify-content: center;
+      .top-band {
+        grid-template-columns: 1fr;
       }
 
-      .die {
-        width: 56px;
-        height: 56px;
+      .center-wheel {
+        margin: 10px auto 0;
+      }
+
+      .bottom-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) and (orientation: landscape) {
+      body {
+        padding: 12px;
+      }
+
+      .frame {
+        padding: 16px;
+        overflow: auto;
+      }
+
+      header {
+        margin-bottom: 16px;
+      }
+
+      .main {
+        gap: 14px;
       }
     }
   </style>
 </head>
 <body>
+  <div class="fullscreen-cta" id="fullscreenCta" hidden>
+    <div class="cta-card">
+      <h2>Landscape fullscreen</h2>
+      <p>Tap once to open in fullscreen and lock landscape on your phone.</p>
+      <button type="button" id="fullscreenBtn">Enter fullscreen</button>
+    </div>
+  </div>
   <main class="frame">
     <header class="stagger">
       <h1>Higher or Lower 10</h1>
@@ -302,51 +407,61 @@
     </header>
 
     <section class="main">
-      <div class="panel stagger">
-        <h2>Roll</h2>
-        <div class="dice-row" id="diceRow">
-          <div class="die" data-index="0">-</div>
-          <div class="die" data-index="1">-</div>
-          <div class="die" data-index="2">-</div>
+      <div class="stagger">
+        <div class="top-band">
+          <div class="choice">
+            <span class="label">Under 10</span>
+            <button type="button" id="guessLow">Choose</button>
+          </div>
+          <div class="center-wheel">
+            <div class="timer" id="timerDisplay">40</div>
+            <div class="dice-circle" id="diceCircle" hidden>
+              <div class="die" data-index="0">-</div>
+              <div class="die" data-index="1">-</div>
+              <div class="die" data-index="2">-</div>
+            </div>
+          </div>
+          <div class="choice">
+            <span class="label">Over 10</span>
+            <button type="button" id="guessHigh">Choose</button>
+          </div>
         </div>
-        <div class="sum" id="sumDisplay">Total: --</div>
-        <p class="status" id="resultDisplay">Place your guess.</p>
-      </div>
-
-      <div class="panel stagger">
-        <h2>Your Guess</h2>
-        <div class="guess-buttons">
-          <button type="button" id="guessHigh">Higher than 10</button>
-          <button type="button" id="guessLow">Lower than 10</button>
-        </div>
-        <div class="wager">
-          <label for="betAmount">Wager this round</label>
-          <input type="number" id="betAmount" min="1" step="1" value="10" />
-        </div>
-        <div class="loan">
-          <label for="loanAmount">Take a loan</label>
-          <input type="number" id="loanAmount" min="1" step="1" placeholder="Enter amount" />
-          <button type="button" id="loanButton">Borrow now</button>
-        </div>
-        <p class="status" id="guessStatus">No guess yet.</p>
-      </div>
-
-      <div class="panel stagger">
-        <h2>Countdown</h2>
-        <div class="timer" id="timerDisplay">40</div>
-        <div class="score">
-          <span class="badge">Balance: <span id="balance">500</span></span>
-          <span class="badge">Wins: <span id="wins">0</span></span>
-          <span class="badge">Losses: <span id="losses">0</span></span>
-          <span class="badge">Pushes: <span id="pushes">0</span></span>
-        </div>
-        <p class="note">If the total is exactly 10, the round is a push.</p>
-        <p class="note" id="loanStatus">No loans due.</p>
+        <p class="status-line" id="resultDisplay">Place your guess.</p>
       </div>
 
       <div class="panel stagger">
         <h2>Recent Rolls</h2>
         <ul class="history" id="historyList"></ul>
+      </div>
+
+      <div class="bottom-row">
+        <div class="panel stagger">
+          <h2>Balance</h2>
+          <div class="score">
+            <span class="badge">Balance: <span id="balance">500</span></span>
+            <span class="badge">Wins: <span id="wins">0</span></span>
+            <span class="badge">Losses: <span id="losses">0</span></span>
+            <span class="badge">Pushes: <span id="pushes">0</span></span>
+          </div>
+        </div>
+
+        <div class="panel stagger">
+          <h2>Wager Amount</h2>
+          <div class="wager">
+            <label for="betAmount">Wager this round</label>
+            <input type="number" id="betAmount" min="1" step="1" value="10" />
+          </div>
+        </div>
+
+        <div class="panel stagger">
+          <h2>Loaning Money</h2>
+          <div class="loan">
+            <label for="loanAmount">Take a loan</label>
+            <input type="number" id="loanAmount" min="1" step="1" placeholder="Enter amount" />
+            <button type="button" id="loanButton">Borrow now</button>
+          </div>
+          <p class="note" id="loanStatus">No loans due.</p>
+        </div>
       </div>
     </section>
   </main>
@@ -357,7 +472,7 @@
     const sumDisplay = document.getElementById("sumDisplay");
     const resultDisplay = document.getElementById("resultDisplay");
     const timerDisplay = document.getElementById("timerDisplay");
-    const guessStatus = document.getElementById("guessStatus");
+    const diceCircle = document.getElementById("diceCircle");
     const guessHigh = document.getElementById("guessHigh");
     const guessLow = document.getElementById("guessLow");
     const betAmount = document.getElementById("betAmount");
@@ -369,6 +484,8 @@
     const pushesEl = document.getElementById("pushes");
     const historyList = document.getElementById("historyList");
     const loanStatus = document.getElementById("loanStatus");
+    const fullscreenCta = document.getElementById("fullscreenCta");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
 
     let countdown = ROLL_INTERVAL;
     let guess = null;
@@ -380,15 +497,47 @@
     let roundCount = 0;
     const history = [];
     const loans = [];
+    let isRolling = false;
+
+    function isMobileViewport() {
+      return window.matchMedia("(max-width: 900px)").matches;
+    }
+
+    function isFullscreen() {
+      return Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+    }
+
+    function lockLandscape() {
+      if (screen.orientation && typeof screen.orientation.lock === "function") {
+        screen.orientation.lock("landscape").catch(() => {});
+      }
+    }
+
+    function requestLandscapeFullscreen() {
+      const root = document.documentElement;
+      if (root.requestFullscreen) {
+        root.requestFullscreen().then(lockLandscape).catch(() => {});
+        return;
+      }
+      if (root.webkitRequestFullscreen) {
+        root.webkitRequestFullscreen();
+        lockLandscape();
+      }
+    }
+
+    function updateFullscreenCta() {
+      const shouldShow = isMobileViewport() && !isFullscreen();
+      fullscreenCta.hidden = !shouldShow;
+    }
 
     function setGuess(value) {
       const wager = Number.parseInt(betAmount.value, 10);
       if (!Number.isFinite(wager) || wager <= 0) {
-        guessStatus.textContent = "Enter a valid wager to play.";
+        resultDisplay.textContent = "Enter a valid wager to play.";
         return;
       }
       if (wager > balance) {
-        guessStatus.textContent = "Not enough balance for that wager.";
+        resultDisplay.textContent = "Not enough balance for that wager.";
         return;
       }
 
@@ -396,15 +545,18 @@
       currentBet = wager;
       guessHigh.classList.toggle("selected", value === "high");
       guessLow.classList.toggle("selected", value === "low");
-      guessStatus.textContent = value === "high"
-        ? `Locked in: higher for ${currentBet}.`
-        : `Locked in: lower for ${currentBet}.`;
+      resultDisplay.textContent = value === "high"
+        ? `Locked in: over 10 for ${currentBet}.`
+        : `Locked in: under 10 for ${currentBet}.`;
     }
 
     guessHigh.addEventListener("click", () => setGuess("high"));
     guessLow.addEventListener("click", () => setGuess("low"));
 
     function rollDice() {
+      isRolling = true;
+      diceCircle.hidden = false;
+      timerDisplay.hidden = true;
       const dice = [0, 0, 0].map(() => 1 + Math.floor(Math.random() * 6));
       const total = dice.reduce((sum, value) => sum + value, 0);
       const outcome = total === 10 ? "push" : (total > 10 ? "high" : "low");
@@ -415,8 +567,6 @@
         void die.offsetWidth;
         die.classList.add("roll");
       });
-
-      sumDisplay.textContent = `Total: ${total}`;
 
       if (!guess) {
         resultDisplay.textContent = "No guess placed this round.";
@@ -460,7 +610,7 @@
       currentBet = 0;
       guessHigh.classList.remove("selected");
       guessLow.classList.remove("selected");
-      guessStatus.textContent = "No guess yet.";
+      resultDisplay.textContent = "No guess yet.";
     }
 
     function settleLoans() {
@@ -525,13 +675,33 @@
     }
 
     function tick() {
+      if (isRolling) {
+        return;
+      }
       countdown -= 1;
       if (countdown <= 0) {
         rollDice();
         countdown = ROLL_INTERVAL;
+        timerDisplay.hidden = false;
+        diceCircle.hidden = true;
+        isRolling = false;
+        timerDisplay.textContent = String(countdown).padStart(2, "0");
       }
       timerDisplay.textContent = String(countdown).padStart(2, "0");
     }
+
+    fullscreenBtn.addEventListener("click", () => {
+      requestLandscapeFullscreen();
+    });
+
+    document.addEventListener("fullscreenchange", updateFullscreenCta);
+    document.addEventListener("webkitfullscreenchange", updateFullscreenCta);
+    window.addEventListener("load", () => {
+      updateFullscreenCta();
+      if (isFullscreen()) {
+        lockLandscape();
+      }
+    });
 
     timerDisplay.textContent = String(countdown).padStart(2, "0");
     setInterval(tick, 1000);
