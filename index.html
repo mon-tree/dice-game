@@ -293,6 +293,16 @@
       color: #111;
     }
 
+    #loanAmount{
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 1rem;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      background: #fff;
+    }
+
     @keyframes float-in {
       from {
         opacity: 0;
@@ -393,12 +403,12 @@
 
       <div class="bottom-row">
         <div class="panel stagger">
-          <h2>Balance</h2>
+          <h2>Thông tin</h2>
           <div class="score">
             <span class="badge">Số dư: <span id="balance">500</span></span>
-            <span class="badge">Wins: <span id="wins">0</span></span>
-            <span class="badge">Losses: <span id="losses">0</span></span>
-            <span class="badge">Pushes: <span id="pushes">0</span></span>
+            <span class="badge">Thắng: <span id="wins">0</span></span>
+            <span class="badge">Thua: <span id="losses">0</span></span>
+            <span class="badge">Hòa: <span id="pushes">0</span></span>
           </div>
         </div>
 
@@ -414,10 +424,10 @@
           <h2>Vay tiền</h2>
           <div class="loan">
             <label for="loanAmount">Nhập khoản vay</label>
-            <input type="number" id="loanAmount" min="1" step="1" placeholder="Enter amount" />
+            <input type="number" id="loanAmount" min="1" step="1" placeholder="Nhập số tiền"/>
             <button type="button" id="loanButton">Vay ngay</button>
           </div>
-          <p class="note" id="loanStatus">No loans due.</p>
+          <p class="note" id="loanStatus">Không có dư nợ.</p>
         </div>
       </div>
     </section>
@@ -456,11 +466,11 @@
     function setGuess(value) {
       const wager = Number.parseInt(betAmount.value, 10);
       if (!Number.isFinite(wager) || wager <= 0) {
-        resultDisplay.textContent = "Enter a valid wager to play.";
+        resultDisplay.textContent = "Đặt cược không hợp lệ.";
         return;
       }
       if (wager > balance) {
-        resultDisplay.textContent = "Not enough balance for that wager.";
+        resultDisplay.textContent = "Không đủ tiền để cược. Hãy vay tiền.";
         return;
       }
 
@@ -469,8 +479,8 @@
       guessHigh.classList.toggle("selected", value === "high");
       guessLow.classList.toggle("selected", value === "low");
       resultDisplay.textContent = value === "high"
-        ? `Locked in: over 10 for ${currentBet}.`
-        : `Locked in: under 10 for ${currentBet}.`;
+        ? `Đã cược tài với: ${currentBet}.`
+        : `Đã cược xỉu với: ${currentBet}.`;
     }
 
     guessHigh.addEventListener("click", () => setGuess("high"));
@@ -559,7 +569,7 @@
 
     function updateLoanStatus() {
       if (loans.length === 0) {
-        loanStatus.textContent = "No loans due.";
+        loanStatus.textContent = "Không có dư nợ.";
         return;
       }
 
@@ -568,13 +578,13 @@
       const dueTotal = loans
         .filter((loan) => loan.dueRound === nextDue)
         .reduce((sum, loan) => sum + loan.amount, 0);
-      loanStatus.textContent = `Next loan due in ${roundsLeft} round${roundsLeft === 1 ? "" : "s"}: ${dueTotal}.`;
+      loanStatus.textContent = `Trả nợ trong vòng ${roundsLeft} round${roundsLeft === 1 ? "" : "s"}: ${dueTotal}.`;
     }
 
     function takeLoan() {
       const amount = Number.parseInt(loanAmount.value, 10);
       if (!Number.isFinite(amount) || amount <= 0) {
-        loanStatus.textContent = "Enter a valid loan amount.";
+        loanStatus.textContent = "Nhập số tiền vay.";
         return;
       }
 
